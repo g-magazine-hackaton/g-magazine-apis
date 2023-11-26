@@ -12,12 +12,13 @@ assignees: ''
 ## 00 조회
 ### Request
 * method: `GET`
-* path: `/path/{paramVariable}?query1=value1&query2=value2`
+* path: `/api/path/{paramVariable}?query1=value1&query2=value2`
 * header: 
 ```json
 {
     "Content-Type": "application/json; charset=utf-8"
 }
+```
 
 ### Response
 * http-status: `200 OK`
@@ -31,12 +32,13 @@ assignees: ''
 ## 00 생성
 ### Request
 * method: `POST`
-* path: `/path/{paramVariable}`
+* path: `/api/path/{paramVariable}`
 * header: 
 ```json
 {
     "Content-Type": "application/json; charset=utf-8"
 }
+```
 * body:
 ```json
 {
