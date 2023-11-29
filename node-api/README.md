@@ -49,3 +49,49 @@
 - `app.js`: 서버의 주요 애플리케이션 파일입니다.
 - `public/`: 정적 파일(HTML, CSS 등)을 포함하는 폴더입니다.
 - `uploads/`: 업로드된 이미지 파일이 저장되는 폴더입니다.
+
+---
+
+# API
+
+## 정적 파일(이미지) 조회
+
+### 요청
+
+- METHOD: `GET`
+- PATH : `localhost:3000/uploads/{fileName.png}`
+  - `{fileName.png}`: `image-1637927389273.png` 파일명과 확장자의 조합
+
+### 응답
+
+```txt
+이미지 파일 그 자체가 응답됩니다.
+```
+
+<br>
+
+## 업로드
+
+### 요청
+
+> 여러 파일 업로드 시, 같은 key로 여러개의 이미지를 보내면 됩니다.
+
+- Method: `POST`
+- Path : `localhost:3000/uploads`
+- Body
+  - 형식: multipart/form-data
+  - 데이터:
+    - key: image
+    - value: (업로드할 이미지 파일)
+
+### 응답
+
+- http-status: `201 Created`
+
+```json
+{
+  "success": true,
+  "message": "파일이 정상 업로드 되었습니다.",
+  "files": ["filename-123.png", "filename-222.png", "filename-4572.png"]
+}
+```
