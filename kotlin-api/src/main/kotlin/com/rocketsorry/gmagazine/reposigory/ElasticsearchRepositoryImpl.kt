@@ -1,7 +1,6 @@
 package com.rocketsorry.gmagazine.reposigory
 
 import com.google.gson.Gson
-import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.google.gson.reflect.TypeToken
@@ -29,19 +28,27 @@ class ElasticsearchRepositoryImpl(private val esClient: RestClient): IElasticsea
     // Gson 객체 생성
     val gson = Gson()
 
-    override fun <T> getDocumentsByIndex(indexName: String): List<JsonObject> {
-        val request: Request = Request("GET", "/$indexName/_search")
-        val jsonString: String = command(request)
-        val jsonElement: JsonElement = JsonParser.parseString(jsonString)
-        val jsonObject: JsonObject = jsonElement.asJsonObject
+    override fun <T> getDocumentsByIndex(indexName: String): Any {
+        try {
+            val request: Request = Request("GET", "/$indexName/_search")
+            val jsonString: String = esClient.performRequest(request).entity.content.reader().readText()
 
-        // JSON 문자열을 객체로 파싱
-        val response = parseJson<ElasticsearchResponseEntity<T>>(jsonString)
-        println(jsonString)
-        val elements = response.hits.hits.map { (source: T) -> gson.fromJson(source.toString(), JsonParser.parseString(source.toString()).asJsonObject::class.java) }
-        println(123)
+            // JSON 문자열을 객체로 파싱
+            val response = parseJson<ElasticsearchResponseEntity<T>>(jsonString)
 
-        return elements
+            return response.hits.hits.map { (source: T) -> gson.fromJson(source.toString(), JsonParser.parseString(source.toString()).asJsonObject::class.java) }
+        } catch (e: ResponseException) {
+            // Elasticsearch에서 응답 코드가 에러인 경우를 처리합니다.
+            println("Elasticsearch Response Error: ${e.response.statusLine}")
+            return e.response.entity.content.reader().readText()
+        } catch (e: IOException) {
+            // IO 예외 처리 (예: 네트워크 문제 등)
+            println("IO Error: ${e.message}")
+            return e.toString()
+        } catch (e: Exception) {
+            println("알 수 없는 에러가 발생했습니다.")
+            return e.toString()
+        }
     }
 
     /**
@@ -53,12 +60,11 @@ class ElasticsearchRepositoryImpl(private val esClient: RestClient): IElasticsea
      *   "index.blocks.read_only_allow_delete": null
      * }
      */
-    override fun <T> saveDocument(indexName: String, documentId: String?, query: String): JsonObject {
-        TODO("Not yet implemented")
+    override fun <T> saveDocument(indexName: String, documentId: String?, query: String): String {
         val endpoint: String = if (documentId != null) "/$indexName/_doc/$documentId" else "/$indexName/_doc"
         val request: Request = Request("POST", endpoint)
-
-        command(request)
+        request.setJsonEntity(query)
+        return esClient.performRequest(request).entity.content.reader().readText()
     }
 
     override fun <T> updateDocumentByIndex(indexName: String, documentId: String, query: String): JsonObject {
@@ -67,25 +73,6 @@ class ElasticsearchRepositoryImpl(private val esClient: RestClient): IElasticsea
 
     override fun deleteDocumentByIndex(indexName: String, documentId: String): JsonObject {
         TODO("Not yet implemented")
-    }
-
-    private fun command(request: Request, query: String = ""): String {
-        request.setJsonEntity(query)
-
-        return try {
-            esClient.performRequest(request).entity.content.reader().readText()
-        } catch (e: ResponseException) {
-            // Elasticsearch에서 응답 코드가 에러인 경우를 처리합니다.
-            println("Elasticsearch Response Error: ${e.response.statusLine}")
-            e.response.entity.content.reader().readText()
-        } catch (e: IOException) {
-            // IO 예외 처리 (예: 네트워크 문제 등)
-            println("IO Error: ${e.message}")
-            e.toString()
-        } catch (e: Exception) {
-            println("알 수 없는 에러가 발생했습니다.")
-            e.toString()
-        }
     }
 
     private inline fun <reified T> parseJson(jsonString: String): T {

@@ -14,9 +14,10 @@ class UserService(
      * 중간 매퍼를 통해 비즈니스 도메인 모델로 컨벌팅할 필요가 있다.
      * 다만, 서비스 규모상 컨벌팅 없이 데이터만 빠르게 서빙하는 것을 목표로 하는 것이 좋겠다.
      */
-    fun getAllUsers(): List<UserEntity> {
-        val users = elasticsearchRepositoryImpl.getDocumentsByIndex<UserEntity>("user")
-        return users.map { user -> UserEntity(user.get("username").toString(), user.get("age").toString().toDouble().toInt()) }
+    fun getAllUsers(): String {
+        val users = elasticsearchRepositoryImpl.getDocumentsByIndex<UserEntity>("usertest")
+//        return users.map { user -> UserEntity(user.get("username").toString(), user.get("age").toString().toDouble().toInt()) }
+        return users.toString()
     }
 
     fun saveUser(): String {
