@@ -1,6 +1,5 @@
 package com.rocketsorry.gmagazine.controller
 
-import com.rocketsorry.gmagazine.entity.User
 import com.rocketsorry.gmagazine.service.UserService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
