@@ -4,7 +4,7 @@
 1. kotlin API: 어플리케이션 CRUD를 위한 API
 2. node API: 파일 업로드용 API
    * 사용 방법: 
-[바로가기](https://https://github.com/g-magazine-hackaton/g-magazine-apis/tree/master/node-api)
+[바로가기](https://github.com/g-magazine-hackaton/g-magazine-apis/tree/master/node-api)
 3. docker-compose: elasticsearch & kibana 로컬 
 테스트용
 
