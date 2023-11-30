@@ -9,5 +9,5 @@ import org.springframework.boot.runApplication
 class GMagazineApplication
 
 fun main(args: Array<String>) {
-	runApplication<GMagazineApplication>(*args)
+    runApplication<GMagazineApplication>(*args)
 }
