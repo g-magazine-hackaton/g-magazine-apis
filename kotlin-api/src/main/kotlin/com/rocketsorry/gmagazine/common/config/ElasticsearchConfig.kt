@@ -1,22 +1,28 @@
 package com.rocketsorry.gmagazine.common.config
 
-import org.apache.http.HttpHost
-import org.elasticsearch.client.RestClient
-import org.springframework.context.annotation.Bean
+import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Configuration
-import org.springframework.core.env.Environment
+import org.springframework.data.elasticsearch.client.ClientConfiguration
+import org.springframework.data.elasticsearch.client.elc.ElasticsearchConfiguration
+import org.springframework.http.HttpHeaders
+import org.springframework.http.MediaType
 
-/**
- * restClient를 아래 설정대로 빈으로 등록한다.
- */
+
 @Configuration
-class ElasticsearchConfig(private val environment: Environment) {
+@EnableConfigurationProperties(ElasticsearchProperties::class)
+class ElasticsearchConfig(
+    private val properties: ElasticsearchProperties
+) : ElasticsearchConfiguration() {
 
-    @Bean
-    fun restClient(): RestClient {
-        val host: String? = environment.getProperty("elasticsearch.host")
-        val port: Int = environment.getProperty("elasticsearch.port")!!.toInt()
+    override fun clientConfiguration(): ClientConfiguration {
+        val headers = HttpHeaders()
+        headers.contentType = MediaType.APPLICATION_JSON
 
-        return RestClient.builder(HttpHost(host, port, "http")).build()
+        return ClientConfiguration.builder()
+            .connectedTo(properties.host + ":" + properties.port)
+            .withDefaultHeaders(headers)
+            .withConnectTimeout(10000)
+            .withSocketTimeout(30000)
+            .build()
     }
 }

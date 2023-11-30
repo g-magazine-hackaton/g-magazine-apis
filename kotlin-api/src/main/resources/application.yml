@@ -1,3 +1,3 @@
 elasticsearch:
-  host: localhost
+  host: 14.6.225.174
   port: 9200
