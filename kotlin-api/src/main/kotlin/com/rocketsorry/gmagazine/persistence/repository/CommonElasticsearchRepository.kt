@@ -1,12 +1,13 @@
 package com.rocketsorry.gmagazine.persistence.repository
 
 import co.elastic.clients.elasticsearch._types.query_dsl.Query
-import com.rocketsorry.gmagazine.persistence.ESQueryBuilder
 import org.springframework.data.domain.Sort
 import org.springframework.data.elasticsearch.client.elc.NativeQueryBuilder
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations
 import org.springframework.data.elasticsearch.core.SearchHits
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates
+import org.springframework.data.elasticsearch.core.query.ByQueryResponse
+import org.springframework.data.elasticsearch.core.query.UpdateQuery
 
 interface CommonElasticsearchRepository<T : Any> {
     var operations: ElasticsearchOperations
@@ -28,12 +29,18 @@ interface CommonElasticsearchRepository<T : Any> {
         return operations.search(query, docClassType(), indexCoordinates())
     }
 
-    fun searchWithSort(dslQuery: Query, sort: Sort, maxResult: Int = 10000): SearchHits<T> {
+    fun update(updateQuery: UpdateQuery): ByQueryResponse {
+        val query = updateQuery.indexName
+        val indexs = indexCoordinates()
+        return operations.updateByQuery(updateQuery, indexCoordinates())
+    }
+
+    fun searchWithSort(sort: Sort, maxResult: Int = 1000): SearchHits<T> {
         val query = NativeQueryBuilder()
-            .withQuery(dslQuery)
             .withMaxResults(maxResult)
             .withSort(sort)
             .build()
+
         return operations.search(query, docClassType(), indexCoordinates())
     }
 }
