@@ -59,16 +59,5 @@ interface CommonESQueryRepository<T : Any> : CommonElasticsearchRepository<T> {
         return searchWithSort(query)
     }
 
-    fun findByUserIdTest(
-        userId: String
-    ): SearchHits<T> {
-        val query = esQueryBuilder.term("consumer_id", userId)
-
-        val boolQuery: BoolQuery = QueryBuilders.bool()
-            .filter(query)
-            .build()
-
-        return search(Query(boolQuery), 1)
-    }
 
 }
