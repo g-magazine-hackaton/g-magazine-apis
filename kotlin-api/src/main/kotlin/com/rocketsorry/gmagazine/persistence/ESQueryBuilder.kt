@@ -1,10 +1,9 @@
 package com.rocketsorry.gmagazine.persistence
 
-import co.elastic.clients.elasticsearch._types.query_dsl.BoolQuery
-import co.elastic.clients.elasticsearch._types.query_dsl.Query
-import co.elastic.clients.elasticsearch._types.query_dsl.RangeQuery
-import co.elastic.clients.elasticsearch._types.query_dsl.TermQuery
+import co.elastic.clients.elasticsearch._types.FieldValue
+import co.elastic.clients.elasticsearch._types.query_dsl.*
 import co.elastic.clients.json.JsonData
+import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Component
 
 @Component
@@ -17,6 +16,25 @@ class ESQueryBuilder {
                 .value(value)
                 .build()
         )
+    }
+
+    fun terms(field: String, values: List<String>): Query {
+        val fieldValues = values.map {
+            FieldValue.Builder().stringValue(it).build()
+        }.toList()
+
+        val termsQueryField = TermsQueryField.Builder().value(fieldValues).build()
+
+        return Query(
+            TermsQuery.Builder()
+                .field(field)
+                .terms(termsQueryField)
+                .build()
+        )
+    }
+
+    fun deSort(field: String): Sort {
+        return Sort.by(field).descending()
     }
 
     fun range(field: String, gteValue: String, lteValue: String): Query {
@@ -32,4 +50,5 @@ class ESQueryBuilder {
     fun query(boolQuery: BoolQuery): Query {
         return Query(boolQuery)
     }
+
 }
