@@ -13,9 +13,6 @@ data class FolderDoc(
     @Field(name = "folder_id", type = FieldType.Keyword)
     var folderId: String,
 
-    @Field(name = "consumer_id", type = FieldType.Keyword)
-    var consumerId: String,
-
     @Field(name = "folder_name", type = FieldType.Keyword)
     var folderName: String,
 
