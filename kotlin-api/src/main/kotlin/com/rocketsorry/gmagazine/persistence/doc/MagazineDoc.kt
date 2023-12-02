@@ -8,7 +8,8 @@ import java.time.LocalDate
 
 data class MagazineDoc(
     @Id
-    var id: String? = null,
+    @Field(name = "id", type = FieldType.Keyword)
+    var docId: String? = null,
 
     @Field(name = "magazine_id", type = FieldType.Keyword)
     var magazineId: String,

@@ -4,10 +4,13 @@ import co.elastic.clients.elasticsearch._types.query_dsl.Query
 import org.springframework.data.domain.Sort
 import org.springframework.data.elasticsearch.client.elc.NativeQueryBuilder
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations
+import org.springframework.data.elasticsearch.core.ScriptType
 import org.springframework.data.elasticsearch.core.SearchHits
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates
-import org.springframework.data.elasticsearch.core.query.ByQueryResponse
+import org.springframework.data.elasticsearch.core.query.IndexQuery
+import org.springframework.data.elasticsearch.core.query.IndexQueryBuilder
 import org.springframework.data.elasticsearch.core.query.UpdateQuery
+import org.springframework.data.elasticsearch.core.query.UpdateResponse
 
 interface CommonElasticsearchRepository<T : Any> {
     var operations: ElasticsearchOperations
@@ -29,10 +32,27 @@ interface CommonElasticsearchRepository<T : Any> {
         return operations.search(query, docClassType(), indexCoordinates())
     }
 
-    fun update(updateQuery: UpdateQuery): ByQueryResponse {
-        val query = updateQuery.indexName
-        val indexs = indexCoordinates()
-        return operations.updateByQuery(updateQuery, indexCoordinates())
+    fun updateWithScript(docId: String, script: String): UpdateResponse {
+        val updateQuery: UpdateQuery = UpdateQuery.builder(docId)
+            .withScript(script)
+            .withScriptType(ScriptType.INLINE)
+            .withLang("painless")
+            .withIndex(indexName())
+            .build()
+
+        return operations.update(updateQuery, indexCoordinates())
+    }
+
+    fun updateWithScript(docId: String, script: String, param: Map<String, Any>): UpdateResponse {
+        val updateQuery: UpdateQuery = UpdateQuery.builder(docId)
+            .withScript(script)
+            .withParams(param)
+            .withScriptType(ScriptType.INLINE)
+            .withLang("painless")
+            .withIndex(indexName())
+            .build()
+
+        return operations.update(updateQuery, indexCoordinates())
     }
 
     fun searchWithSort(sort: Sort, maxResult: Int = 1000): SearchHits<T> {

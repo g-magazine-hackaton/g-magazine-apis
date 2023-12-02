@@ -4,10 +4,10 @@ package com.rocketsorry.gmagazine.persistence.repository
 import co.elastic.clients.elasticsearch._types.query_dsl.BoolQuery
 import co.elastic.clients.elasticsearch._types.query_dsl.Query
 import co.elastic.clients.elasticsearch._types.query_dsl.QueryBuilders
-
 import com.rocketsorry.gmagazine.persistence.ESQueryBuilder
 import com.rocketsorry.gmagazine.persistence.enum.IdField
 import org.springframework.data.elasticsearch.core.SearchHits
+import org.springframework.data.elasticsearch.core.query.UpdateResponse
 
 interface CommonESQueryRepository<T : Any> : CommonElasticsearchRepository<T> {
 
@@ -60,4 +60,20 @@ interface CommonESQueryRepository<T : Any> : CommonElasticsearchRepository<T> {
     }
 
 
+    fun updateLikeCount(
+        docId: String
+    ): UpdateResponse {
+        val script = "ctx._source.liked_cnt += 1"
+        return updateWithScript(docId, script)
+    }
+
+    fun updateLikeList(
+        docId: String,
+        magazinId: String,
+    ): UpdateResponse {
+        val script = "ctx._source.liked_magazine_ids.add(params.new_magazine_id)"
+        val param = mapOf("new_magazine_id" to magazinId)
+
+        return updateWithScript(docId, script, param)
+    }
 }
