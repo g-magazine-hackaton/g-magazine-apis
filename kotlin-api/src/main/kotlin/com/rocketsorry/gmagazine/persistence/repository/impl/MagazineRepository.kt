@@ -18,9 +18,15 @@ class MagazineRepository(
     override fun docClassType() = MagazineDoc::class.java
     override fun idFieldType() = IdField.MAGAZINE
     fun updateLikeCount(
-        docId: String
+        docId: String,
+        isPlus: Boolean
     ): UpdateResponse {
-        val script = "ctx._source.liked_cnt += 1"
+        val script = if (isPlus){
+            "ctx._source.liked_cnt += 1"
+        }else {
+            "ctx._source.liked_cnt -= 1"
+        }
+
         return updateWithScript(docId, script)
     }
 

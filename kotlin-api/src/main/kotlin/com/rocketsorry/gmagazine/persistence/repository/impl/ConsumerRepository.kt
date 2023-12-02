@@ -7,6 +7,7 @@ import com.rocketsorry.gmagazine.persistence.repository.CommonESQueryRepository
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations
 import org.springframework.data.elasticsearch.core.query.UpdateResponse
 import org.springframework.stereotype.Repository
+import java.util.*
 
 @Repository
 class ConsumerRepository(
@@ -21,8 +22,13 @@ class ConsumerRepository(
     fun updateLikeList(
         docId: String,
         magazinId: String,
+        isPlus: Boolean
     ): UpdateResponse {
-        val script = "ctx._source.liked_magazine_ids.add(params.new_magazine_id)"
+        val script = if (isPlus){
+            "ctx._source.liked_magazine_ids.add(params.new_magazine_id)"
+        }else {
+            "ctx._source.liked_magazine_ids.removeAll(Collections.singleton(params.new_magazine_id))"
+        }
         val param = mapOf("new_magazine_id" to magazinId)
 
         return updateWithScript(docId, script, param)
