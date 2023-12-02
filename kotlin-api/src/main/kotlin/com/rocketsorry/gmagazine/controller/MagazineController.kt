@@ -18,9 +18,10 @@ class MagazineController(
 
     @GetMapping("/detail")
     fun getMagazine(
-        magazineId: String
+        magazineId: String,
+        consumerId: String,
     ): ResponseEntity<FetchResponse> {
-        val response = magazineService.getMagazineDetail(magazineId)
+        val response = magazineService.getMagazineDetail(magazineId, consumerId)
         return ResponseEntity.ok()
             .body(response)
     }
