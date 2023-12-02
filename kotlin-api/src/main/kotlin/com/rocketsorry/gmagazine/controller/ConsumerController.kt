@@ -4,6 +4,7 @@ import com.rocketsorry.gmagazine.service.ConsumerService
 import com.rocketsorry.gmagazine.service.request.FollowRequest
 import com.rocketsorry.gmagazine.service.response.FetchResponse
 import com.rocketsorry.gmagazine.service.response.UpdateResponse
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
@@ -55,8 +56,7 @@ class ConsumerController(
         @RequestBody followRequest: FollowRequest
     ): ResponseEntity<UpdateResponse> {
         val response = consumerService.addFollow(followRequest)
-        return ResponseEntity.ok()
-            .body(response)
+        return ResponseEntity.status(HttpStatus.CREATED).body(response)
     }
 
     @GetMapping("/rank")
