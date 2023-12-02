@@ -39,6 +39,11 @@ interface CommonESQueryRepository<T : Any> : CommonElasticsearchRepository<T> {
         return search(Query(boolQuery))
     }
 
+    fun findAll(): SearchHits<T> {
+        val boolQuery: BoolQuery = QueryBuilders.bool().build()
+        return search(Query(boolQuery))
+    }
+
     fun findAllById(
         searchId: String,
         idField: IdField
