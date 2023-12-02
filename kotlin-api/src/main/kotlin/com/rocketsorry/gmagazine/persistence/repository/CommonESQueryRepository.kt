@@ -64,21 +64,4 @@ interface CommonESQueryRepository<T : Any> : CommonElasticsearchRepository<T> {
         return searchWithSort(query)
     }
 
-
-    fun updateLikeCount(
-        docId: String
-    ): UpdateResponse {
-        val script = "ctx._source.liked_cnt += 1"
-        return updateWithScript(docId, script)
-    }
-
-    fun updateLikeList(
-        docId: String,
-        magazinId: String,
-    ): UpdateResponse {
-        val script = "ctx._source.liked_magazine_ids.add(params.new_magazine_id)"
-        val param = mapOf("new_magazine_id" to magazinId)
-
-        return updateWithScript(docId, script, param)
-    }
 }
