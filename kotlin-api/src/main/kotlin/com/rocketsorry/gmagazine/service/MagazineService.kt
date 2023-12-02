@@ -23,17 +23,21 @@ class MagazineService(
     private val consumerRepository: ConsumerRepository,
 ) {
     fun getMagazineDetail(
-        magazineId: String
+        magazineId: String,
+        consumerId: String,
     ): FetchResponse {
-        val magz = magazineRepository.findById(magazineId).searchHits[0].content
-        val goodsInfo = magz.goodsIds?.let { goodsRepository.findByIds(it).searchHits.map { it.content }.toList() }
+        val consumerLikes = consumerRepository.findById(consumerId).searchHits[0].content.likedMagazineIds
+        val magazineInfo = magazineRepository.findById(magazineId).searchHits[0].content
+        val goodsInfo = magazineInfo.goodsIds?.let { goodsRepository.findByIds(it).searchHits.map { it.content }.toList() }
+        val isLike = consumerLikes?.contains(magazineId)
 
         val responseData = mapOf(
-            "magazine" to magz,
-            "goods" to goodsInfo
+            "magazine" to magazineInfo,
+            "goods" to goodsInfo,
+            "isLike" to isLike
         )
 
-        return FetchResponse.of(true, "성공했습니다", responseData)
+        return FetchResponse.of(true, Message.SUCCESS.content, responseData)
     }
 
     fun getMagazineAll(
@@ -97,7 +101,6 @@ class MagazineService(
 
     private fun generateRandomMagazineId(): String {
         // Generate a random string for magazine_id
-        // You can modify this method to generate the random ID according to your requirements
         val leftLimit = 97 // letter 'a'
         val rightLimit = 122 // letter 'z'
         val targetStringLength = 10
