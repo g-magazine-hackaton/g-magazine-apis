@@ -28,7 +28,8 @@ class MagazineService(
     ): FetchResponse {
         val consumerLikes = consumerRepository.findById(consumerId).searchHits[0].content.likedMagazineIds
         val magazineInfo = magazineRepository.findById(magazineId).searchHits[0].content
-        val goodsInfo = magazineInfo.goodsIds?.let { goodsRepository.findByIds(it).searchHits.map { it.content }.toList() }
+        val goodsInfo =
+            magazineInfo.goodsIds?.let { goodsRepository.findByIds(it).searchHits.map { it.content }.toList() }
         val isLike = consumerLikes?.contains(magazineId)
 
         val responseData = mapOf(
@@ -66,7 +67,7 @@ class MagazineService(
     fun saveMagazine(
         req: MagazineRequest
     ): StoreResponse {
-        val newMagazineId  = generateRandomMagazineId()
+        val newMagazineId = generateRandomMagazineId()
         val magazineDoc = MagazineDoc(
             docId = newMagazineId,
             magazineId = newMagazineId,
