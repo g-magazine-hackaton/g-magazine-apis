@@ -2,7 +2,9 @@ package com.rocketsorry.gmagazine.service
 
 import com.rocketsorry.gmagazine.persistence.enum.IdField
 import com.rocketsorry.gmagazine.persistence.repository.impl.ConsumerRepository
+import com.rocketsorry.gmagazine.service.request.FollowRequest
 import com.rocketsorry.gmagazine.service.response.FetchResponse
+import com.rocketsorry.gmagazine.service.response.UpdateResponse
 import com.rocketsorry.gmagazine.service.response.enums.Message
 import org.springframework.stereotype.Service
 
@@ -70,6 +72,18 @@ class ConsumerService(
         val responseData = mapOf("consumers" to consumers)
 
         return FetchResponse.of(true, Message.SUCCESS.content, responseData)
+    }
+
+    fun addFollow(
+        req: FollowRequest
+    ): UpdateResponse {
+        val addFollower = consumerRepository.updateFollowerList(req.consumerId, req.myId)
+        val addFollowing = consumerRepository.updateFollowingList(req.consumerId, req.myId)
+        val responseData = mapOf(
+            "followerUpdate" to addFollower.result.toString(),
+            "followingUpdate" to addFollowing.result.toString()
+        )
+        return UpdateResponse(true, Message.SUCCESS.content, responseData)
     }
 
 }

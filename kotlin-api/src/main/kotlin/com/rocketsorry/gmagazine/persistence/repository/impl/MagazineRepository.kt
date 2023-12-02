@@ -5,6 +5,7 @@ import com.rocketsorry.gmagazine.persistence.doc.MagazineDoc
 import com.rocketsorry.gmagazine.persistence.enum.IdField
 import com.rocketsorry.gmagazine.persistence.repository.CommonESQueryRepository
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations
+import org.springframework.data.elasticsearch.core.query.UpdateResponse
 import org.springframework.stereotype.Repository
 
 @Repository
@@ -14,9 +15,13 @@ class MagazineRepository(
 
 ) : CommonESQueryRepository<MagazineDoc> {
     override fun indexName() = "magazines"
-
     override fun docClassType() = MagazineDoc::class.java
-
     override fun idFieldType() = IdField.MAGAZINE
+    fun updateLikeCount(
+        docId: String
+    ): UpdateResponse {
+        val script = "ctx._source.liked_cnt += 1"
+        return updateWithScript(docId, script)
+    }
 
 }
