@@ -88,8 +88,8 @@ class MagazineService(
     fun likeMagazine(
         req: LikeRequest
     ): UpdateResponse {
-        val likeUpdate = magazineRepository.updateLikeCount(req.magazineId)
-        val likeListUpdate = consumerRepository.updateLikeList(req.consumerId, req.magazineId)
+        val likeUpdate = magazineRepository.updateLikeCount(req.magazineId, req.isPlus)
+        val likeListUpdate = consumerRepository.updateLikeList(req.consumerId, req.magazineId, req.isPlus)
 
         val storeResult = mapOf(
             "likeCountUpdate" to likeUpdate.result.toString(),
