@@ -25,8 +25,7 @@ class ConsumerService(
         myId: String
     ): FetchResponse {
         val consumer = consumerRepository.findById(consumerId).searchHits[0].content
-        val followings = consumerRepository.findById(myId).searchHits[0].content.followerConsumerIds
-        val isFollow = followings?.contains(myId)
+        val isFollow = consumer.followingConsumerIds?.contains(myId)
 
         val responseData = mapOf(
             "consumer" to consumer,
