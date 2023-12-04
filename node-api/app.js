@@ -33,7 +33,7 @@ const upload = multer({
 });
 
 // 루트 경로에서 HTML 파일 응답
-app.get("/", (req, res) => {
+app.get("/uploads", (req, res) => {
   res.sendFile(__dirname + "/public/upload.html");
 });
 
