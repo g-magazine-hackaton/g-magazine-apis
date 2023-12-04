@@ -4,7 +4,8 @@
 
 1. kotlin API: 어플리케이션 CRUD를 위한 API
 2. node API: 파일 업로드용 API
-3. docker-compose: elasticsearch & kibana 로컬
+3. docker-compose.yml: kotlin/node를 한 번에 띄워주며, nginx 7001 포트를 통해 각 서버로 트래픽을 분산해준다.
+4. docker-compose-db.yml: elasticsearch & kibana 로컬
    테스트용
 
 # API
