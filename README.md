@@ -5,6 +5,7 @@
 1. kotlin API: 어플리케이션 CRUD를 위한 API
 2. node API: 파일 업로드용 API
 3. docker-compose.yml: kotlin/node를 한 번에 띄워주며, nginx 7001 포트를 통해 각 서버로 트래픽을 분산해준다.
+   - 라즈베리파이 이상으로 로컬에서 es/kibana 띄워서 연동되도록 수정하였음.
 4. docker-compose-db.yml: elasticsearch & kibana 로컬
    테스트용 (WAS에서는 클라우드 DB와 통신하므로 실제로는 사용할 필요 없다.)
 
@@ -47,6 +48,7 @@ git clone https://github.com/g-magazine-hackaton/g-magazine-apis.git
 #### Run
 
 > Docker Compose를 이용하여 `node-api`와 `kotlin-api`를 한 번에 로드합니다.  
+> `elasticsearch`와 `kibana`도 함께 로드됩니다. (라즈베리 이슈)  
 > 서버 URL은 `http://localhost:7001` 입니다.
 
 `docker-compose.yml` 파일이 존재하는 루트 경로에서 아래 명령어를 실행해야 합니다.
@@ -55,6 +57,14 @@ git clone https://github.com/g-magazine-hackaton/g-magazine-apis.git
 # -d 옵션은 데몬으로 로드합니다. 서버 로깅을 보고 싶다면 -d 옵션을 제거하면 됩니다.
 # --build 옵션을 추가하면 매 실행 시 변경 사항이 발생했다면 이미지부터 재생성합니다.
 $ docker-compose up --build -d
+```
+
+#### Init data
+
+> ES의 초기 데이터 셋을 적재합니다.
+
+```bash
+$ sh ./init-elasticsearch.sh
 ```
 
 #### Terminate
