@@ -67,7 +67,7 @@ class ConsumerController(
     }
 
     @GetMapping("/{consumerId}/scraps")
-    fun getConsumerRank(@PathVariable consumerId: String): ResponseEntity<FetchResponse> {
+    fun getScrappedMagazines(@PathVariable consumerId: String): ResponseEntity<FetchResponse> {
         val response = consumerService.getScrappedMagazines(consumerId)
         return ResponseEntity.ok()
             .body(response)
