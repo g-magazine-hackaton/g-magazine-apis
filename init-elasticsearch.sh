@@ -80,7 +80,7 @@ echo "\nES에 초기 데이터를 적재합니다..."
 # 벌크 데이터 파일 실행
 curl -X POST "$ES_HOST/_bulk" -H 'Content-Type: application/json' -d '
 { "index" : { "_index" : "consumers", "_id" : "consumer1" } }
-{ "consumer_id" : "consumer1", "consumer_nickname" : "주부9단", "consumer_rank" : 5, "consumer_score" : 32000, "profile_content" : "지마켓 대표 주부9단", "profile_url" : "/healthcheck.png", "scrapped_magazine_ids" : [ ], "liked_magazine_ids" : [1, 2, 3, 4, 5], "follower_consumer_ids" : ["consumer2", "consumer3", "consumer4", "consumer5", "consumer6", "consumer7", "consumer8", "consumer9", "consumer10"], "following_consumer_ids" : ["consumer2", "consumer3", "consumer6", "consumer8", "consumer10"], "up_dt" : "2023-12-05" }
+{ "consumer_id" : "consumer1", "consumer_nickname" : "주부9단", "consumer_rank" : 5, "consumer_score" : 32000, "profile_content" : "지마켓 대표 주부9단", "profile_url" : "/healthcheck.png", "scrapped_magazine_ids" : ["1", "2", "3", "4", "5"], "liked_magazine_ids" : ["1", "2", "3", "4", "5"], "follower_consumer_ids" : ["consumer2", "consumer3", "consumer4", "consumer5", "consumer6", "consumer7", "consumer8", "consumer9", "consumer10"], "following_consumer_ids" : ["consumer2", "consumer3", "consumer6", "consumer8", "consumer10"], "up_dt" : "2023-12-05" }
 { "index" : { "_index" : "consumers", "_id" : "consumer2" } }
 { "consumer_id" : "consumer2", "consumer_nickname" : "G구본", "consumer_rank" : 5, "consumer_score" : 29000, "profile_content" : "G구본의 잡학다식", "profile_url" : "/healthcheck.png", "scrapped_magazine_ids" : [ ], "liked_magazine_ids" : [ ], "follower_consumer_ids" : ["consumer1" ], "following_consumer_ids" : ["consumer1" ], "up_dt" : "2023-12-05" }
 { "index" : { "_index" : "consumers", "_id" : "consumer3" } }
