@@ -53,4 +53,14 @@ class ConsumerRepository(
 
         return updateWithScript(consumerId, script, param)
     }
+
+    fun updateScrappedMagazineId(
+        consumerId: String,
+        magazineId: String
+    ): UpdateResponse {
+        val script = "ctx._source.scrapped_magazine_ids.add(params.new_scrapped_magazine_id)"
+        val param = mapOf("new_scrapped_magazine_id" to magazineId)
+
+        return updateWithScript(consumerId, script, param)
+    }
 }

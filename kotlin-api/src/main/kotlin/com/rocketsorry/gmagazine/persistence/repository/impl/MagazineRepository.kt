@@ -17,6 +17,7 @@ class MagazineRepository(
     override fun indexName() = "magazines"
     override fun docClassType() = MagazineDoc::class.java
     override fun idFieldType() = IdField.MAGAZINE
+
     fun updateLikeCount(
         docId: String,
         isPlus: Boolean
@@ -29,5 +30,4 @@ class MagazineRepository(
 
         return updateWithScript(docId, script)
     }
-
 }

@@ -2,6 +2,7 @@ package com.rocketsorry.gmagazine.service
 
 import com.rocketsorry.gmagazine.persistence.enum.IdField
 import com.rocketsorry.gmagazine.persistence.repository.impl.ConsumerRepository
+import com.rocketsorry.gmagazine.persistence.repository.impl.MagazineRepository
 import com.rocketsorry.gmagazine.service.request.FollowRequest
 import com.rocketsorry.gmagazine.service.response.FetchResponse
 import com.rocketsorry.gmagazine.service.response.UpdateResponse
@@ -10,7 +11,8 @@ import org.springframework.stereotype.Service
 
 @Service
 class ConsumerService(
-    private val consumerRepository: ConsumerRepository
+    private val consumerRepository: ConsumerRepository,
+    private val magazineRepository: MagazineRepository
 ) {
     fun getMyInfo(
         consumerId: String
@@ -74,6 +76,13 @@ class ConsumerService(
         return FetchResponse.of(true, Message.SUCCESS.content, responseData)
     }
 
+    fun getScrappedMagazines(consumerId: String): FetchResponse {
+        val consumer = consumerRepository.findById(consumerId).searchHits[0].content
+        val responseData = mapOf("scrappedMagazineIds" to consumer.scrappedMagazineIds)
+
+        return FetchResponse.of(true, Message.SUCCESS.content, responseData)
+    }
+
     fun addFollow(
         req: FollowRequest
     ): UpdateResponse {
@@ -84,6 +93,19 @@ class ConsumerService(
             "followingUpdate" to addFollowing.result.toString()
         )
         return UpdateResponse(true, Message.SUCCESS.content, responseData)
+    }
+
+    fun scrapMagazine(
+        consumerId: String,
+        magazineId: String
+    ): UpdateResponse {
+        val scrappedMagazineIdUpdate = consumerRepository.updateScrappedMagazineId(consumerId, magazineId)
+
+        val storeResult = mapOf(
+            "scrappedMagazineId" to scrappedMagazineIdUpdate.result.toString()
+        )
+
+        return UpdateResponse(true, Message.SUCCESS.content, storeResult)
     }
 
 }

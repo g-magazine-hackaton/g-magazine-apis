@@ -65,4 +65,20 @@ class ConsumerController(
         return ResponseEntity.ok()
             .body(response)
     }
+
+    @GetMapping("/{consumerId}/scraps")
+    fun getConsumerRank(@PathVariable consumerId: String): ResponseEntity<FetchResponse> {
+        val response = consumerService.getScrappedMagazines(consumerId)
+        return ResponseEntity.ok()
+            .body(response)
+    }
+
+    @PostMapping("/{consumerId}/scraps/{magazineId}")
+    fun scrapMagazine(
+        @PathVariable consumerId: String,
+        @PathVariable magazineId: String
+    ): ResponseEntity<UpdateResponse> {
+        val response = consumerService.scrapMagazine(consumerId, magazineId)
+        return ResponseEntity.status(HttpStatus.CREATED).body(response)
+    }
 }
