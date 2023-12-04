@@ -1,16 +1,42 @@
 version: '3.8'
+
 services:
-  node-api:
-    build: ./node-api
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.16.1-arm64
+    container_name: elasticsearch
+    environment:
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "cluster.routing.allocation.disk.watermark.low=85%"
+      - "cluster.routing.allocation.disk.watermark.high=90%"
+      - "cluster.routing.allocation.disk.watermark.flood_stage=95%"
+      - discovery.type=single-node
     ports:
-      - "3000:3000"
-    volumes:
-      - ./node-api/uploads:/usr/src/app/uploads # 사진 업로드 폴더와 컨테이너 링크
+      - "9200:9200"
+      - "9300:9300"
+    #volumes:
+    #  - ./es/data:/usr/share/elasticsearch/data # es 데이터 적재 폴더 마운트
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.16.1-arm64
+    container_name: kibana
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
 
   kotlin-api:
     build: ./kotlin-api
     ports:
       - "8080:8080"
+    depends_on:
+      - elasticsearch
+
+  node-api:
+    build: ./node-api
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./node-api/uploads:/usr/src/app/uploads # 이미지 업로드 폴더 마운트
 
   nginx:
     image: nginx:latest
@@ -19,5 +45,5 @@ services:
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
     depends_on:
-      - node-api
       - kotlin-api
+      - node-api
