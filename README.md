@@ -8,19 +8,23 @@
 4. docker-compose-db.yml: elasticsearch & kibana 로컬
    테스트용 (WAS에서는 클라우드 DB와 통신하므로 실제로는 사용할 필요 없다.)
 
-# API
+<br>
 
-## 이미지 업로드 API
+## API
+
+### 이미지 업로드 API
 
 > http://localhost:7001/uploads/
 
 [여기](https://github.com/g-magazine-hackaton/g-magazine-apis/issues/5)를 참고해주세요.
 
-## 어플리케이션 CRUD API
+### 어플리케이션 CRUD API
 
 > http://localhost:7001/api/
 
 [프로젝트 보드](https://github.com/orgs/g-magazine-hackaton/projects/3)의 각 페이지 별 이슈를 참고해주세요.
+
+<br>
 
 ## 시작하기
 
