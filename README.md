@@ -6,7 +6,7 @@
 2. node API: 파일 업로드용 API
 3. docker-compose.yml: kotlin/node를 한 번에 띄워주며, nginx 7001 포트를 통해 각 서버로 트래픽을 분산해준다.
 4. docker-compose-db.yml: elasticsearch & kibana 로컬
-   테스트용
+   테스트용 (WAS에서는 클라우드 DB와 통신하므로 실제로는 사용할 필요 없다.)
 
 # API
 
