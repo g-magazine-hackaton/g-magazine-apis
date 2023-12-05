@@ -1,3 +1,3 @@
 elasticsearch:
-  host: elasticsearch
+  host: 13.125.206.214
   port: 9200

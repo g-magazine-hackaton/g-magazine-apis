@@ -7,7 +7,6 @@ import co.elastic.clients.elasticsearch._types.query_dsl.QueryBuilders
 import com.rocketsorry.gmagazine.persistence.ESQueryBuilder
 import com.rocketsorry.gmagazine.persistence.enum.IdField
 import org.springframework.data.elasticsearch.core.SearchHits
-import org.springframework.data.elasticsearch.core.query.UpdateResponse
 
 interface CommonESQueryRepository<T : Any> : CommonElasticsearchRepository<T> {
 
@@ -37,6 +36,20 @@ interface CommonESQueryRepository<T : Any> : CommonElasticsearchRepository<T> {
             .build()
 
         return search(Query(boolQuery))
+    }
+
+    fun findByIdsWithSort(
+        searchIds: List<String>,
+        sortField: IdField
+    ): SearchHits<T> {
+        val query = esQueryBuilder.terms(idFieldType().fieldName, searchIds)
+        val sortQuery = esQueryBuilder.deSort(sortField.fieldName)
+
+        val boolQuery: BoolQuery = QueryBuilders.bool()
+            .filter(query)
+            .build()
+
+        return searchWithSort(Query(boolQuery), sortQuery, 1000)
     }
 
     fun findAll(): SearchHits<T> {

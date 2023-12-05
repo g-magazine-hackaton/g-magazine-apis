@@ -22,9 +22,9 @@ class MagazineRepository(
         docId: String,
         isPlus: Boolean
     ): UpdateResponse {
-        val script = if (isPlus){
+        val script = if (isPlus) {
             "ctx._source.liked_cnt += 1"
-        }else {
+        } else {
             "ctx._source.liked_cnt -= 1"
         }
 

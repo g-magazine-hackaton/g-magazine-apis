@@ -4,6 +4,7 @@ import com.rocketsorry.gmagazine.persistence.enum.IdField
 import com.rocketsorry.gmagazine.persistence.repository.impl.ConsumerRepository
 import com.rocketsorry.gmagazine.persistence.repository.impl.MagazineRepository
 import com.rocketsorry.gmagazine.service.request.FollowRequest
+import com.rocketsorry.gmagazine.service.request.ProfileRequest
 import com.rocketsorry.gmagazine.service.response.FetchResponse
 import com.rocketsorry.gmagazine.service.response.UpdateResponse
 import com.rocketsorry.gmagazine.service.response.enums.Message
@@ -34,6 +35,24 @@ class ConsumerService(
         val responseData = mapOf(
             "consumer" to consumer,
             "isFollow" to isFollow
+        )
+
+        return FetchResponse.of(true, Message.SUCCESS.content, responseData)
+    }
+
+    fun getRecentUpdateFollowings(
+        consumerId: String
+    ): FetchResponse {
+        val followings = consumerRepository.findById(consumerId).searchHits[0].content.followingConsumerIds
+        val consumers = followings?.let {
+            consumerRepository.findByIdsWithSort(
+                it,
+                IdField.CONSUMER_UPDT
+            ).searchHits.map { it.content }.toList()
+        }
+
+        val responseData = mapOf(
+            "consumer" to consumers,
         )
 
         return FetchResponse.of(true, Message.SUCCESS.content, responseData)
@@ -86,8 +105,8 @@ class ConsumerService(
     fun addFollow(
         req: FollowRequest
     ): UpdateResponse {
-        val addFollower = consumerRepository.updateFollowerList(req.consumerId, req.myId)
-        val addFollowing = consumerRepository.updateFollowingList(req.consumerId, req.myId)
+        val addFollower = consumerRepository.updateFollowerList(req.consumerId, req.myId, req.isFollow)
+        val addFollowing = consumerRepository.updateFollowingList(req.consumerId, req.myId, req.isFollow)
         val responseData = mapOf(
             "followerUpdate" to addFollower.result.toString(),
             "followingUpdate" to addFollowing.result.toString()
@@ -106,6 +125,22 @@ class ConsumerService(
         )
 
         return UpdateResponse(true, Message.SUCCESS.content, storeResult)
+    }
+
+    fun updateProfile(
+        req: ProfileRequest
+    ): UpdateResponse {
+        val saveProfile = consumerRepository.updateProfile(
+            consumerId = req.consumerId,
+            nickName = req.nickName,
+            content = req.content,
+            profileUrl = req.photoUrl,
+            dt = req.upDt.toString(),
+        )
+
+        val updateData = mapOf("profileUpdate" to saveProfile.result.toString())
+
+        return UpdateResponse(true, Message.SUCCESS.content, updateData)
     }
 
 }

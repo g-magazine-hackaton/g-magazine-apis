@@ -2,6 +2,7 @@ package com.rocketsorry.gmagazine.controller
 
 import com.rocketsorry.gmagazine.service.ConsumerService
 import com.rocketsorry.gmagazine.service.request.FollowRequest
+import com.rocketsorry.gmagazine.service.request.ProfileRequest
 import com.rocketsorry.gmagazine.service.response.FetchResponse
 import com.rocketsorry.gmagazine.service.response.UpdateResponse
 import org.springframework.http.HttpStatus
@@ -29,6 +30,15 @@ class ConsumerController(
         myId: String,
     ): ResponseEntity<FetchResponse> {
         val response = consumerService.getConsumer(consumerId, myId)
+        return ResponseEntity.ok()
+            .body(response)
+    }
+
+    @GetMapping("/followings/recent-update")
+    fun getRecentUpdateFollowings(
+        consumerId: String
+    ): ResponseEntity<FetchResponse> {
+        val response = consumerService.getRecentUpdateFollowings(consumerId)
         return ResponseEntity.ok()
             .body(response)
     }
@@ -79,6 +89,14 @@ class ConsumerController(
         @PathVariable magazineId: String
     ): ResponseEntity<UpdateResponse> {
         val response = consumerService.scrapMagazine(consumerId, magazineId)
+        return ResponseEntity.status(HttpStatus.CREATED).body(response)
+    }
+
+    @PostMapping("/profile/update")
+    fun updateProfile(
+        @RequestBody profileRequest: ProfileRequest
+    ): ResponseEntity<UpdateResponse> {
+        val response = consumerService.updateProfile(profileRequest)
         return ResponseEntity.status(HttpStatus.CREATED).body(response)
     }
 }
