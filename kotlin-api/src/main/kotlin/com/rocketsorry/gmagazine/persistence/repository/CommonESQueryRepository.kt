@@ -57,17 +57,19 @@ interface CommonESQueryRepository<T : Any> : CommonElasticsearchRepository<T> {
         return search(Query(boolQuery))
     }
 
-    fun findAllById(
+    fun findAllByIdWithSort(
         searchId: String,
-        idField: IdField
+        searchField: IdField,
+        sortField: IdField,
     ): SearchHits<T> {
-        val query = esQueryBuilder.term(idField.fieldName, searchId)
+        val query = esQueryBuilder.term(searchField.fieldName, searchId)
+        val sortQuery = esQueryBuilder.deSort(sortField.fieldName)
 
         val boolQuery: BoolQuery = QueryBuilders.bool()
             .filter(query)
             .build()
 
-        return search(Query(boolQuery))
+        return searchWithSort(Query(boolQuery), sortQuery, 10000)
     }
 
     fun findAllWithSort(

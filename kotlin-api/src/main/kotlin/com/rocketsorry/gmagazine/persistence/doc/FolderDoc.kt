@@ -4,7 +4,6 @@ import org.springframework.data.annotation.Id
 import org.springframework.data.elasticsearch.annotations.DateFormat
 import org.springframework.data.elasticsearch.annotations.Field
 import org.springframework.data.elasticsearch.annotations.FieldType
-import java.time.LocalDate
 
 data class FolderDoc(
     @Id
@@ -16,6 +15,6 @@ data class FolderDoc(
     @Field(name = "folder_name", type = FieldType.Keyword)
     var folderName: String,
 
-    @Field(name = "up_dt", type = FieldType.Date, format = [DateFormat.date])
-    var upDt: LocalDate
+    @Field(name = "up_dt", type = FieldType.Date, format = [DateFormat.date_hour_minute_second])
+    var upDt: String
 )
