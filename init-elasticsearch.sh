@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Elasticsearch 서버 주소
-ES_HOST="localhost:9200"
+ES_HOST="13.125.206.214:9200"
 
 # 인덱스 및 매핑 생성
 echo "\n인덱스 데이터 매핑 구조에 따라 인덱스를 생성합니다..."
