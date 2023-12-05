@@ -81,6 +81,7 @@ class MagazineService(
         )
 
         val response = magazineRepository.save(magazineDoc)
+        val updateConsumer = consumerRepository.updateDate(req.consumerId, req.upDt.toString())
 
         return StoreResponse(true, Message.SUCCESS.content, response.magazineId)
     }

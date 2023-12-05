@@ -61,4 +61,14 @@ interface CommonElasticsearchRepository<T : Any> {
 
         return operations.search(query, docClassType(), indexCoordinates())
     }
+
+    fun searchWithSort(dslQuery: Query, sort: Sort, maxResult: Int = 1000): SearchHits<T> {
+        val query = NativeQueryBuilder()
+            .withQuery(dslQuery)
+            .withMaxResults(maxResult)
+            .withSort(sort)
+            .build()
+
+        return operations.search(query, docClassType(), indexCoordinates())
+    }
 }

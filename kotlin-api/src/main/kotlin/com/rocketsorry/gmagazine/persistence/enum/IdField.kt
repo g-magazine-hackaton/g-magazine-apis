@@ -7,6 +7,6 @@ enum class IdField(
     MAGAZINE("magazine_id"),
     FOLDER("folder_id"),
     GOODS("goods_id"),
-    CONSUMER_RANK("consumer_score")
-
+    CONSUMER_RANK("consumer_score"),
+    CONSUMER_UPDT("up_dt")
 }

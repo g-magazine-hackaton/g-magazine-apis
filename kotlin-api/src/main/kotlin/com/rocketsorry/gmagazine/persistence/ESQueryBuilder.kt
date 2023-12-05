@@ -37,6 +37,10 @@ class ESQueryBuilder {
         return Sort.by(field).descending()
     }
 
+    fun asSort(field: String): Sort {
+        return Sort.by(field).ascending()
+    }
+
     fun range(field: String, gteValue: String, lteValue: String): Query {
         return Query(
             RangeQuery.Builder()
