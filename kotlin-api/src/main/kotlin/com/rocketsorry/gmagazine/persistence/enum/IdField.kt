@@ -8,5 +8,5 @@ enum class IdField(
     FOLDER("folder_id"),
     GOODS("goods_id"),
     CONSUMER_RANK("consumer_score"),
-    CONSUMER_UPDT("up_dt")
+    UP_DT("up_dt")
 }

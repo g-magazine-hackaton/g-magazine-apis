@@ -45,7 +45,11 @@ class MagazineService(
         consumerId: String
     ): FetchResponse {
         val magazines =
-            magazineRepository.findAllById(consumerId, IdField.CONSUMER).searchHits.map { it.content }.toList()
+            magazineRepository.findAllByIdWithSort(
+                consumerId,
+                IdField.CONSUMER,
+                IdField.UP_DT
+            ).searchHits.map { it.content }.toList()
         val responseData = mapOf(
             "magazines" to magazines
         )
@@ -56,7 +60,11 @@ class MagazineService(
     fun getFolders(
         consumerId: String
     ): FetchResponse {
-        val folders = folderRepository.findAllById(consumerId, IdField.CONSUMER).searchHits.map { it.content }.toList()
+        val folders = folderRepository.findAllByIdWithSort(
+            consumerId,
+            IdField.CONSUMER,
+            IdField.UP_DT
+        ).searchHits.map { it.content }.toList()
         val responseData = mapOf(
             "folders" to folders
         )

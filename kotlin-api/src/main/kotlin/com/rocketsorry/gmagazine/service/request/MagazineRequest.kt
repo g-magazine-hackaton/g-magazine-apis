@@ -1,7 +1,5 @@
 package com.rocketsorry.gmagazine.service.request
 
-import java.time.LocalDate
-
 data class MagazineRequest(
     val consumerId: String,
     val magazineContent: String,
@@ -9,5 +7,5 @@ data class MagazineRequest(
     val folderId: String?,
     val goodsIds: List<String>?,
     val photoUrls: List<String>,
-    val upDt: LocalDate
+    val upDt: String
 )

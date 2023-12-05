@@ -47,7 +47,7 @@ class ConsumerService(
         val consumers = followings?.let {
             consumerRepository.findByIdsWithSort(
                 it,
-                IdField.CONSUMER_UPDT
+                IdField.UP_DT
             ).searchHits.map { it.content }.toList()
         }
 
